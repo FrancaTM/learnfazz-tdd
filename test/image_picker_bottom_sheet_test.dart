@@ -1,10 +1,3 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility that Flutter provides. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -17,16 +10,19 @@ void main() {
       (WidgetTester tester) async {
     BuildContext savedContext;
 
-    await tester.pumpWidget(MaterialApp(
-      home: Builder(builder: (BuildContext context) {
-        savedContext = context;
-        return Container();
-      }),
-    ));
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Builder(builder: (BuildContext context) {
+          savedContext = context;
+          return Container();
+        }),
+      ),
+    );
 
     await tester.pump();
-    expect(ImagePickerBottomSheet.kTakeNewPictureText, findsNothing);
-    expect(ImagePickerBottomSheet.kChooseFromGalleryText, findsNothing);
+    expect(find.text(ImagePickerBottomSheet.kTakeNewPictureText), findsNothing);
+    expect(
+        find.text(ImagePickerBottomSheet.kChooseFromGalleryText), findsNothing);
 
     ImagePickerBottomSheet.showImagePickerBottomSheet(savedContext);
 
@@ -37,5 +33,32 @@ void main() {
         find.text(ImagePickerBottomSheet.kTakeNewPictureText), findsOneWidget);
     expect(find.text(ImagePickerBottomSheet.kChooseFromGalleryText),
         findsOneWidget);
+  });
+
+  testWidgets('Bottom sheet should appear and show correct icon',
+      (WidgetTester tester) async {
+    BuildContext savedContext;
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Builder(builder: (BuildContext context) {
+          savedContext = context;
+          return Container();
+        }),
+      ),
+    );
+
+    await tester.pump();
+
+    expect(find.byIcon(Icons.add_photo_alternate), findsNothing);
+    expect(find.byIcon(Icons.add_a_photo), findsNothing);
+
+    ImagePickerBottomSheet.showImagePickerBottomSheet(savedContext);
+
+    await tester.pump(); // Bottom sheet show animation starts
+    await tester.pump(const Duration(seconds: 2)); // animation done
+
+    expect(find.byIcon(Icons.add_photo_alternate), findsOneWidget);
+    expect(find.byIcon(Icons.add_a_photo), findsOneWidget);
   });
 }
