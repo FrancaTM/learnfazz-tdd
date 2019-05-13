@@ -12,10 +12,12 @@ void showImagePickerBottomSheet(BuildContext context) async {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             ListTile(
+              leading: Icon(Icons.add_photo_alternate),
               title: Text(kChooseFromGalleryText),
               onTap: () {},
             ),
             ListTile(
+              leading: Icon(Icons.add_a_photo),
               title: Text(kTakeNewPictureText),
               onTap: () {},
             ),
